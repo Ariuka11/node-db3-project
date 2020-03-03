@@ -24,7 +24,9 @@ async function add(newScheme) {
     //         return findById(ids[0])
     //     })
     const [id] = await db("schemes").insert(newScheme)
-    return db("schemes").where({ id }).first()
+    return db("schemes")
+        .where({ id })
+        .first()
 }
 async function update(id, changes) {
     // return db("schemes")
