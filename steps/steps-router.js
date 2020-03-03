@@ -5,6 +5,16 @@ const router = express.Router({
     mergeParams: true
 })
 
+router.get("/", async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const step = await steps.findSteps(id)
+        res.json(step)
+    } catch (err) {
+        next(err)
+    }
+})
+
 router.get("/:id", async (req, res, next) => {
     try {
         const { id } = req.params

@@ -3,7 +3,6 @@ const db = require('../data/db')
 module.exports = {
     find,
     findById,
-    findSteps,
     add,
     update,
     remove
@@ -17,18 +16,21 @@ function findById(id) {
         .where({ id })
         .first()
 }
-function findSteps(scheme_id) {
-    return db("steps")
-        .join("schemes", "schemes.id", "steps.scheme_id")
-        .select("steps.id", "steps.instructions", "scheme_name")
-        .where("schemes.id", scheme_id)
-}
-function add() {
-    
-}
-function update() {
 
+function add(newScheme) {
+    return db("schemes")
+        .insert(newScheme)
+        .then(ids => {
+            return findById(ids[0])
+        })
 }
-function remove() {
-
+function update(id, changes) {
+    return db("schemes")
+        .where({ id })
+        .update(changes)
+}
+function remove(id) {
+    return db("schemes")
+        .where("id", id)
+        .del()
 }

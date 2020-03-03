@@ -33,22 +33,6 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.get('/:id/steps', (req, res) => {
-  const { id } = req.params;
-
-  Schemes.findSteps(id)
-    .then(steps => {
-      if (steps.length) {
-        res.json(steps);
-      } else {
-        res.status(404).json({ message: 'Could not find steps for given scheme' })
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: 'Failed to get steps' });
-    });
-});
-
 router.post('/', (req, res) => {
   const schemeData = req.body;
 
@@ -88,7 +72,7 @@ router.put('/:id', (req, res) => {
   Schemes.findById(id)
     .then(scheme => {
       if (scheme) {
-        Schemes.update(changes, id)
+        Schemes.update(id, changes)
           .then(updatedScheme => {
             res.json(updatedScheme);
           });
