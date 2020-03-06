@@ -22,10 +22,12 @@ router.get("/", async (req, res, next) => {
     }
 })
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:stepId", async (req, res, next) => {
     try {
+        const { stepId } = req.params
         const { id } = req.params
-        const step = await steps.findBySchemeId(id)
+
+        const step = await steps.findStepById(id, stepId)
         if (step) {
             res.json(step)
         } else {
@@ -33,6 +35,17 @@ router.get("/:id", async (req, res, next) => {
                 message: 'Could not find scheme with given id.'
             })
         }
+    } catch (err) {
+        next(err)
+    }
+})
+
+router.post("/", async (req, res, next) => {
+    try {
+        const { instructions, step_number } = req.body 
+        const { id } = req.params // scheme_id
+        const newStep = await steps.addStep(id, {instructions, step_number})
+        res.json(newStep)
     } catch (err) {
         next(err)
     }
